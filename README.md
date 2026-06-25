@@ -13,7 +13,7 @@ to live on **Vercel free + Supabase free**.
 ## ✨ Features
 
 - 💬 **Real-time messaging** (Supabase Realtime) — text, emoji, big stickers, GIFs
-- 🎞️ **GIF search** via Tenor (key stays server-side)
+- 🎞️ **GIF search** via KLIPY (key stays server-side)
 - 😀 **Emoji picker** with search + "send as big sticker" mode
 - ❤️ **Reactions** on any message (Discord-style)
 - ↩️ **Replies**, ✏️ edit, 🗑️ delete your own messages
@@ -41,8 +41,8 @@ npm install
   - `anon` public key
   - `service_role` secret key
 
-### 3. Get a Tenor (GIF) key — optional but cute
-- [Tenor quickstart](https://developers.google.com/tenor/guides/quickstart) → make a key (free).
+### 3. Get a KLIPY (GIF) key — optional but cute
+- [KLIPY developers](https://klipy.com/developers) → grab a key from the Partner Panel (Tenor's public API is gone).
 - Skip this and GIFs simply show a friendly "add a key" note; everything else works.
 
 ### 4. Environment variables
@@ -69,7 +69,7 @@ the second person does the same. That's it, the nest is full. 🪺
 2. [vercel.com](https://vercel.com) → **Add New → Project** → import the repo.
 3. Add the same env vars from `.env.local` in **Project → Settings → Environment Variables**
    (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
-   `SUPABASE_SERVICE_ROLE_KEY`, `TENOR_API_KEY`, `SESSION_SECRET`).
+   `SUPABASE_SERVICE_ROLE_KEY`, `KLIPY_API_KEY`, `SESSION_SECRET`).
 4. Deploy. Share the URL with your person. 💌
 
 ---

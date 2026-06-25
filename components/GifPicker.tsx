@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-type Gif = { id: string; preview: string; url: string; alt: string; ratio: number };
+type Gif = { id: string; preview: string; url: string; alt: string; blur: string | null; ratio: number };
 
 const SUGGESTIONS = ["cute", "love", "hug", "miss you", "cat", "happy", "kiss", "dance", "sleepy", "sorry"];
 
@@ -17,14 +17,14 @@ export default function GifPicker({ onPick }: { onPick: (url: string) => void })
     setLoading(true);
     setErr(null);
     try {
-      const res = await fetch(`/api/tenor?q=${encodeURIComponent(q)}`);
+      const res = await fetch(`/api/gifs?q=${encodeURIComponent(q)}`);
       const data = await res.json();
       if (data.error && (!data.results || data.results.length === 0)) {
-        setErr(data.error === "TENOR_API_KEY not set" ? "Add TENOR_API_KEY to enable GIFs 🔑" : "GIFs unavailable right now 🥺");
+        setErr(data.error === "KLIPY_API_KEY not set" ? "Add KLIPY_API_KEY to enable GIFs 🔑" : "GIFs unavailable right now 🥺");
       }
       setGifs(data.results ?? []);
     } catch {
-      setErr("Couldn't reach Tenor 🥺");
+      setErr("Couldn't reach the GIF server 🥺");
       setGifs([]);
     } finally {
       setLoading(false);
@@ -72,13 +72,20 @@ export default function GifPicker({ onPick }: { onPick: (url: string) => void })
           </div>
         ) : err ? (
           <div className="h-full grid place-items-center text-center text-sm text-inkSoft px-6">{err}</div>
+        ) : gifs.length === 0 ? (
+          <div className="h-full grid place-items-center text-center text-sm text-inkSoft px-6">no gifs found 🥺</div>
         ) : (
           <div className="columns-2 sm:columns-3 gap-1.5 [column-fill:_balance]">
             {gifs.map((g) => (
               <button
                 key={g.id}
                 onClick={() => onPick(g.url)}
-                className="mb-1.5 w-full overflow-hidden rounded-xl block hover:ring-2 ring-lav-400 transition"
+                className="mb-1.5 w-full overflow-hidden rounded-xl block hover:ring-2 ring-lav-400 transition bg-lav-50"
+                style={
+                  g.blur
+                    ? { backgroundImage: `url(${g.blur})`, backgroundSize: "cover" }
+                    : undefined
+                }
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={g.preview} alt={g.alt} loading="lazy" className="w-full block" />
@@ -88,7 +95,7 @@ export default function GifPicker({ onPick }: { onPick: (url: string) => void })
         )}
       </div>
 
-      <p className="text-[10px] text-inkSoft/60 text-center mt-1">powered by Tenor</p>
+      <p className="text-[10px] text-inkSoft/60 text-center mt-1">powered by KLIPY</p>
     </div>
   );
 }
