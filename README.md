@@ -76,8 +76,10 @@ the second person does the same. That's it, the nest is full. 🪺
 
 ## 🧱 How it works
 
-- **Writes** (send, react, edit, mood, profile) go through Next.js **server actions** using
-  the Supabase `service_role` key — never exposed to the browser.
+- **Writes** (send, react, edit, mood, profile) go through Next.js **server actions**, which
+  validate the session cookie before touching the DB. They use the Supabase **anon** key by
+  default (RLS has scoped write policies), or the **service_role** secret if you set
+  `SUPABASE_SERVICE_ROLE_KEY` (bypasses RLS — more secure).
 - **Reads / live updates** use the browser **anon** client + Supabase **Realtime**
   (postgres changes for messages/reactions/profiles, broadcast for typing & pokes,
   presence for online status).
@@ -85,9 +87,12 @@ the second person does the same. That's it, the nest is full. 🪺
   private space for two — there's no public sign-up beyond the two seats.
 
 ### Security note
-This is a hobby app for two trusted people. Message rows are readable by the anon key
-(needed for Realtime). If you want stronger privacy later, move reads behind the server
-or switch to Supabase Auth + per-row RLS. Good enough for a couple's secret corner. 💜
+This is a hobby app for two trusted people. The public Supabase URL + anon key are baked in
+as fallbacks (they ship in the browser anyway) and RLS allows reads + scoped writes — so
+anyone who finds the URL could, in theory, hit the API directly. Fine for an obscure private
+corner. To harden: set `SUPABASE_SERVICE_ROLE_KEY` + a strong `SESSION_SECRET`, tighten the
+write policies in [`supabase/migrations/0001_init.sql`](supabase/migrations/0001_init.sql),
+or move to Supabase Auth. Good enough for a couple's secret nest. 💜
 
 ---
 
