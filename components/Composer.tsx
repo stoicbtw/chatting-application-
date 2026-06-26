@@ -55,7 +55,7 @@ export default function Composer({
     const reply = replyTo?.id ?? null;
     clearReply();
     start(async () => {
-      const res = await sendMessage({ kind: "text", content, reply_to: reply });
+      const res = await sendMessage({ meId: me.id, kind: "text", content, reply_to: reply });
       if (res.ok && res.message) onSent(res.message);
     });
   }
@@ -63,7 +63,7 @@ export default function Composer({
   function sendSticker(emoji: string) {
     setPanel(null);
     start(async () => {
-      const res = await sendMessage({ kind: "sticker", content: emoji });
+      const res = await sendMessage({ meId: me.id, kind: "sticker", content: emoji });
       if (res.ok && res.message) onSent(res.message);
     });
   }
@@ -71,7 +71,7 @@ export default function Composer({
   function sendGif(url: string) {
     setPanel(null);
     start(async () => {
-      const res = await sendMessage({ kind: "gif", gif_url: url, content: "" });
+      const res = await sendMessage({ meId: me.id, kind: "gif", gif_url: url, content: "" });
       if (res.ok && res.message) onSent(res.message);
     });
   }

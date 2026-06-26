@@ -34,12 +34,12 @@ export default function MessageBubble({
 
   function react(emoji: string) {
     setShowReact(false);
-    start(() => void toggleReaction(message.id, emoji));
+    start(() => void toggleReaction(me.id, message.id, emoji));
   }
 
   function saveEdit() {
     setEditing(false);
-    if (draft.trim() && draft !== message.content) start(() => void editMessage(message.id, draft.trim()));
+    if (draft.trim() && draft !== message.content) start(() => void editMessage(me.id, message.id, draft.trim()));
   }
 
   return (
@@ -83,7 +83,7 @@ export default function MessageBubble({
                 <ActBtn title="edit" onClick={() => { setDraft(message.content); setEditing(true); }}>✏️</ActBtn>
               )}
               {mine && (
-                <ActBtn title="delete" onClick={() => start(() => void deleteMessage(message.id))}>🗑️</ActBtn>
+                <ActBtn title="delete" onClick={() => start(() => void deleteMessage(me.id, message.id))}>🗑️</ActBtn>
               )}
             </div>
 

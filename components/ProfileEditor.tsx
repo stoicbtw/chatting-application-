@@ -21,7 +21,7 @@ const ABOUT_FIELDS: { key: string; label: string; placeholder: string; emoji: st
   { key: "fun_fact", label: "a fun fact about me", placeholder: "i can wiggle my ears", emoji: "✨" },
 ];
 
-export default function ProfileEditor({ profile }: { profile: Profile }) {
+export default function ProfileEditor({ profile, slug }: { profile: Profile; slug: string }) {
   const [avatar, setAvatar] = useState(profile.avatar_emoji);
   const [displayName, setDisplayName] = useState(profile.display_name);
   const [accent, setAccent] = useState(profile.accent);
@@ -42,7 +42,7 @@ export default function ProfileEditor({ profile }: { profile: Profile }) {
       // strip empty about fields
       const cleanAbout: Record<string, string> = {};
       for (const [k, v] of Object.entries(about)) if (v.trim()) cleanAbout[k] = v.trim();
-      await updateProfile({
+      await updateProfile(profile.id, {
         display_name: displayName,
         avatar_emoji: avatar,
         accent,
@@ -50,7 +50,7 @@ export default function ProfileEditor({ profile }: { profile: Profile }) {
         about: cleanAbout,
         pet_name: petName,
       });
-      await setMood(mood.emoji, mood.label);
+      await setMood(profile.id, mood.emoji, mood.label);
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     });
@@ -64,7 +64,7 @@ export default function ProfileEditor({ profile }: { profile: Profile }) {
     >
       {/* top bar */}
       <div className="flex items-center justify-between mb-3 px-1">
-        <Link href="/chat" className="btn-ghost text-sm">← back to chat</Link>
+        <Link href={`/n/${slug}`} className="btn-ghost text-sm">← back to chat</Link>
         <h1 className="font-display text-2xl text-lav-800">all about you 💜</h1>
         <div className="w-20" />
       </div>

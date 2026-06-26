@@ -1,5 +1,14 @@
+export type Nest = {
+  id: string;
+  slug: string;
+  name: string;
+  member_cap: number;
+  created_at: string;
+};
+
 export type Profile = {
   id: string;
+  nest_id: string;
   name: string;
   display_name: string;
   avatar_emoji: string;
@@ -22,8 +31,19 @@ export type Reaction = {
   created_at: string;
 };
 
+export type ResetRequest = {
+  id: string;
+  nest_id: string;
+  requester_id: string;
+  status: "pending" | "approved" | "used" | "declined";
+  partner_note: string | null;
+  created_at: string;
+  approved_at: string | null;
+};
+
 export type Message = {
   id: string;
+  nest_id: string;
   sender_id: string;
   kind: "text" | "gif" | "sticker";
   content: string;
@@ -44,4 +64,4 @@ export type Nudge = {
 
 // columns safe to expose to the browser (never passcode_hash)
 export const PROFILE_COLS =
-  "id,name,display_name,avatar_emoji,accent,mood_emoji,mood_label,bio,about,pet_name,pet_xp,last_seen,created_at";
+  "id,nest_id,name,display_name,avatar_emoji,accent,mood_emoji,mood_label,bio,about,pet_name,pet_xp,last_seen,created_at";

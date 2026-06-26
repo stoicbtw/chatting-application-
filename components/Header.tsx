@@ -3,20 +3,22 @@
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { motion } from "framer-motion";
-import type { Profile } from "@/lib/types";
+import type { Nest, Profile } from "@/lib/types";
 import type { NudgeKind } from "@/components/ChatRoom";
-import { logout } from "@/app/actions";
+import { logoutNest } from "@/app/actions";
 import MoodPicker from "@/components/MoodPicker";
 import PartnerCard from "@/components/PartnerCard";
 
 export default function Header({
   me,
   partner,
+  nest,
   partnerOnline,
   onNudge,
 }: {
   me: Profile;
   partner: Profile | null;
+  nest: Nest;
   partnerOnline: boolean;
   onNudge: (k: NudgeKind) => void;
 }) {
@@ -27,6 +29,15 @@ export default function Header({
     <header className="sticky top-0 z-20 px-3 pt-3">
       {partner && <PartnerCard partner={partner} open={showPartner} onClose={() => setShowPartner(false)} />}
       <div className="card px-3.5 py-2.5 flex items-center gap-3">
+        {/* home / switch nests */}
+        <Link
+          href="/"
+          title={`${nest.name} — switch nests`}
+          className="shrink-0 text-2xl w-10 h-10 grid place-items-center rounded-full bg-white/70 hover:bg-white border border-white transition"
+        >
+          🪺
+        </Link>
+
         {/* partner */}
         {partner ? (
           <button onClick={() => setShowPartner(true)} className="flex items-center gap-3 min-w-0 text-left rounded-full hover:bg-white/40 pr-2 transition">
@@ -76,16 +87,16 @@ export default function Header({
 
         {/* profile + logout */}
         <Link
-          href="/profile"
+          href={`/n/${nest.slug}/profile`}
           className="text-2xl w-10 h-10 grid place-items-center rounded-full bg-white/70 hover:bg-white border border-white transition"
           title="your profile"
         >
           {me.avatar_emoji}
         </Link>
         <button
-          onClick={() => startLogout(async () => { await logout(); window.location.href = "/login"; })}
+          onClick={() => startLogout(async () => { await logoutNest(me.id); window.location.href = "/"; })}
           className="text-inkSoft hover:text-rose-400 transition w-9 h-9 grid place-items-center rounded-full hover:bg-white/70"
-          title="log out"
+          title="log out of this nest"
         >
           ⎋
         </button>

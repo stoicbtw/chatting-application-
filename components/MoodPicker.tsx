@@ -14,7 +14,7 @@ export default function MoodPicker({ me }: { me: Profile }) {
   function choose(emoji: string, label: string) {
     setOptimistic({ emoji, label });
     setOpen(false);
-    start(() => void setMood(emoji, label));
+    start(() => void setMood(me.id, emoji, label));
   }
 
   return (
